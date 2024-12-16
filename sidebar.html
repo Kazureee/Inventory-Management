@@ -1,13 +1,15 @@
-<!-- sidebar.html -->
 <div id="sidebar">
-    <div class="sidebar-header">Inventory</div>
+    <div class="sidebar-header">
+        My Dashboard
+    </div>
     <ul class="sidebar-menu">
-        <li><a href="#"><i class="fas fa-home"></i> Home</a></li>
-        <li><a href="#"><i class="fas fa-tshirt"></i> Inventory</a></li>
-        <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="usermanagement.html">User Management</a></li>
+        <li><a href="inventory.html" class="active">Product</a></li>
+        <li><a href="sales.html">Sales</a></li>
+        <li><a href="salesreport.html">Sales Report</a></li>
     </ul>
-    <!-- Logout Button -->
     <div id="logout-link">
-        <button id="logout-button" class="logout-button">Logout</button>
+        <button class="logout-button" onclick="window.location.href='logout.html'">Logout</button>
     </div>
 </div>

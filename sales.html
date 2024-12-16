@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="sidebar-container"></div>
+    <script>
+        fetch("sidebar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("sidebar-container").innerHTML = data;
+
+                const currentPage = window.location.pathname.split("/").pop(); 
+                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
+
+                sidebarLinks.forEach(link => {
+                    const linkHref = link.getAttribute("href").split("/").pop(); 
+                    if (linkHref === currentPage) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            })
+            .catch(err => console.error("Error loading sidebar:", err));
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clothing Store Inventory</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <button id="logout-button" class="logout-button">Logout</button>
+    <div class="container" id="inventory-container">
+        <div class="inventory-title">Inventory</div>
+        <form id="inventory-form">
+            <input type="text" id="item-name" placeholder="Item Name" required>
+            <select id="item-type">
+                <option value="Pants">Pants</option>
+                <option value="T-Shirt">T-Shirt</option>
+                <option value="Polo">Polo</option>
+                <option value="Jacket">Jacket</option>
+                <option value="Polo Shirt">Polo Shirt</option>
+            </select>
+            <input type="number" id="item-quantity" placeholder="Quantity" min="1" required>
+            <input type="number" id="item-price" placeholder="Price" min="0.01" step="0.01" required>
+            <button type="submit">Add Item</button>
+        </form>
+
+        <div class="separator"></div>
+
+        <table id="inventory-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Items will appear here -->
+            </tbody>
+        </table>
+    </div>
+    <script>
+        document.getElementById("logout-button").addEventListener("click", () => {
+            window.location.href = "login.html";
+        });
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const inventoryForm = document.getElementById("inventory-form");
+            const inventoryTableBody = document.querySelector("#inventory-table tbody");
+
+            inventoryForm.addEventListener("submit", (event) => {
+                event.preventDefault();
+
+                const itemName = document.getElementById("item-name").value;
+                const itemType = document.getElementById("item-type").value;
+                const itemQuantity = document.getElementById("item-quantity").value;
+                const itemPrice = document.getElementById("item-price").value;
+
+                const newRow = document.createElement("tr");
+
+                newRow.innerHTML = `
+                    <td>${itemName}</td>
+                    <td>${itemType}</td>
+                    <td>${itemQuantity}</td>
+                    <td>${itemPrice}</td>
+                    <td>
+                        <button class="icon-btn edit-btn" title="Edit">
+                            <i class="fas fa-edit" style="color: #ffc107;"></i>
+                        </button>
+                        <button class="icon-btn delete-btn" title="Delete">
+                            <i class="fas fa-trash" style="color: #dc3545;"></i>
+                        </button>
+                    </td>
+                `;
+
+                newRow.querySelector(".edit-btn").addEventListener("click", () => {
+                    const cells = newRow.querySelectorAll("td");
+                    document.getElementById("item-name").value = cells[0].textContent;
+                    document.getElementById("item-type").value = cells[1].textContent;
+                    document.getElementById("item-quantity").value = cells[2].textContent;
+                    document.getElementById("item-price").value = cells[3].textContent;
+                    newRow.remove();
+                });
+
+                newRow.querySelector(".delete-btn").addEventListener("click", () => {
+                    newRow.remove();
+                });
+
+                inventoryTableBody.appendChild(newRow);
+                inventoryForm.reset();
+            });
+        });
+    </script>
+</body>
+</html>

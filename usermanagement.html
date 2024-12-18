@@ -23,45 +23,80 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Example row -->
-                <tr>
-                    <td>John Doe</td>
-                    <td>johndoe</td>
-                    <td>Admin</td>
-                    <td>2024-12-16 08:30 AM</td>
-                    <td>
-                        <button class="action-btn block-btn">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                        <button class="action-btn edit-role-btn">
-                            <i class="fas fa-user-edit"></i>
-                        </button>
-                    </td>
-                </tr>
-                <!-- Additional rows can be added dynamically -->
+                
             </tbody>
         </table>
     </div>
+    <div id="edit-user-modal" style="display: none;">
+    <h2>Edit User</h2>
+    <form id="edit-user-form">
+        <input type="text" id="edit-name" placeholder="Name" required>
+        <input type="text" id="edit-username" placeholder="Username" required>
+        <select id="edit-role">
+            <option value="User ">User </option>
+            <option value="Admin">Admin</option>
+        </select>
+        <button type="submit">Save Changes</button>
+        <button type="button" id="close-modal">Cancel</button>
+    </form>
+</div>
+<script>
+    // Load sidebar dynamically
+    fetch("sidebar.html")
+        .then(response => response.text())
+        .then(data => {
+            document.getElementById("sidebar-container").innerHTML = data;
+            const currentPage = window.location.pathname.split("/").pop(); 
+            const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
-    <script>
-        // Load sidebar dynamically
-        fetch("sidebar.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("sidebar-container").innerHTML = data;
-                const currentPage = window.location.pathname.split("/").pop(); 
-                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
+            sidebarLinks.forEach(link => {
+                const linkHref = link.getAttribute("href").split("/").pop(); 
+                if (linkHref === currentPage) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        })
+        .catch(err => console.error("Error loading sidebar:", err));
 
-                sidebarLinks.forEach(link => {
-                    const linkHref = link.getAttribute("href").split("/").pop(); 
-                    if (linkHref === currentPage) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            })
-            .catch(err => console.error("Error loading sidebar:", err));
-    </script>
+    // Function to load users from localStorage and display them in the table
+    function loadUsers() {
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+        userTableBody.innerHTML = ''; // Clear existing rows
+
+        users.forEach(user => {
+            const row = userTableBody.insertRow();
+            row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
+            row.insertCell(1).innerText = user.username;
+            row.insertCell(2).innerText = user.role;
+            row.insertCell(3).innerText = user.lastLogin || "Never"; // Default to "Never" if no last login
+            row.insertCell(4).innerHTML = '<button class="delete-btn">Delete</button>'; // Add delete button
+        });
+    }
+
+    // Initial load of users
+    loadUsers();
+
+    // Optional: Add functionality to delete users
+    const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+    userTableBody.addEventListener('click', (event) => {
+        if (event.target.classList.contains('delete-btn')) {
+            const row = event.target.closest('tr');
+            const username = row.cells[1].innerText; // Get the username from the row
+
+            // Retrieve existing users from localStorage
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+
+            // Filter out the deleted user
+            const updatedUsers = users.filter(user => user.username !== username);
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+            // Remove the row from the table
+            userTableBody.removeChild(row);
+        }
+    });
+</script>
 </body>
 </html>

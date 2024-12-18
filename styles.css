@@ -262,3 +262,17 @@ tr:hover {
     width: 120px;
     text-align: center;
 }
+#edit-user-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+#edit-user-modal button {
+    margin: 5px;
+}

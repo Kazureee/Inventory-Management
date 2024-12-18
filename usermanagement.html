@@ -72,7 +72,7 @@
             row.insertCell(1).innerText = user.username;
             row.insertCell(2).innerText = user.role;
             row.insertCell(3).innerText = user.lastLogin || "Never"; // Default to "Never" if no last login
-            row.insertCell(4).innerHTML = '<button class="delete-btn">Delete</button>'; // Add delete button
+            row.insertCell(4).innerHTML = '<button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>'; // Add delete button
         });
     }
 
@@ -97,6 +97,54 @@
             userTableBody.removeChild(row);
         }
     });
+
+    userTableBody.addEventListener('click', (event) => {
+    if (event.target.classList.contains('edit-btn')) {
+        const row = event.target.closest('tr');
+        const username = row.cells[1].innerText;
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const userToEdit = users.find(user => user.username === username);
+
+        if (userToEdit) {
+            document.getElementById("edit-name").value = userToEdit.name;
+            document.getElementById("edit-username").value = userToEdit.username;
+            document.getElementById("edit-role").value = userToEdit.role;
+
+            document.getElementById("edit-user-modal").style.display = "block";
+
+            document.getElementById("edit-user-form").onsubmit = (e) => {
+                e.preventDefault();
+
+                userToEdit.name = document.getElementById("edit-name").value;
+                userToEdit.username = document.getElementById("edit-username").value;
+                userToEdit.role = document.getElementById("edit-role").value;
+
+                localStorage.setItem("users", JSON.stringify(users));
+
+                loadUsers();
+                document.getElementById("edit-user-modal").style.display = "none";
+            };
+        }
+    } else if (event.target.classList.contains('delete-btn')) {
+        const row = event.target.closest('tr');
+        const username = row.cells[1].innerText;
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const updatedUsers = users.filter(user => user.username !== username);
+
+        localStorage.setItem("users", JSON.stringify(updatedUsers));
+        userTableBody.removeChild(row);
+    }
+});
+
+// Close modal on cancel button
+document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("edit-user-modal").style.display = "none";
+});
+
+// Initial load of users
+loadUsers();
 </script>
 </body>
 </html>

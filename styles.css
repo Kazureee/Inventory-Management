@@ -1,4 +1,3 @@
-/* General Reset */
 * {
     margin: 0;
     padding: 0;
@@ -12,7 +11,6 @@ body {
     background-color: #f9f9f9;
 }
 
-/* Sidebar Styling */
 #sidebar {
     width: 250px;
     background-color: #343a40;
@@ -61,13 +59,11 @@ body {
     margin-right: 10px;
 }
 
-/* Active link styling (optional) */
 .sidebar-menu li a.active {
     background-color: #007bff;
     color: white;
 }
 
-/* Logout button styling in sidebar */
 #logout-link {
     margin-top: auto;
     border-top: 1px solid #484e53;
@@ -77,7 +73,7 @@ body {
 
 .logout-button {
     width: 100%;
-    background-color: #dc3545; /* Red background for logout button */
+    background-color: #dc3545;
     color: white;
     border: none;
     padding: 10px 0;
@@ -88,12 +84,11 @@ body {
 }
 
 .logout-button:hover {
-    background-color: #a71d2a; /* Darker red on hover */
+    background-color: #a71d2a;
 }
 
-/* Container for Main Content */
 .container {
-    margin-left: 250px; /* Offset to the right of the sidebar */
+    margin-left: 250px;
     padding: 20px;
     flex: 1;
 }
@@ -104,65 +99,166 @@ h1 {
     color: #333;
 }
 
-/* Table Styling (Consistent with Inventory Table) */
-#user-table, #inventory-table {
+table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-#user-table th, #inventory-table th, #user-table td, #inventory-table td {
+th, td {
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
 }
 
-#user-table th, #inventory-table th {
+th {
     background-color: #007bff;
     color: white;
-    font-weight: bold;
 }
 
-#user-table tr:nth-child(even), #inventory-table tr:nth-child(even) {
+tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-#user-table tr:hover, #inventory-table tr:hover {
+tr:hover {
     background-color: #ddd;
 }
 
-/* Button Styling for Actions */
 .action-btn {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
-    padding: 5px 10px;
-    font-size: 14px;
-    font-weight: bold;
+    justify-content: center;
+    padding: 5px;
+    font-size: 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    background-color: transparent;
     transition: background 0.3s;
+    margin: 0 5px;
 }
 
-.block-btn {
-    background-color: #dc3545;
+/* Edit Button Styling */
+.edit-btn {
+    background-color: #007bff; /* Blue for Edit */
     color: white;
 }
 
-.block-btn:hover {
-    background-color: #a71d2a;
+.edit-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
 }
 
-.edit-role-btn {
+/* Delete Button Styling */
+.delete-btn {
+    background-color: #dc3545; /* Red for Delete */
+    color: white;
+}
+
+.delete-btn:hover {
+    background-color: #a71d2a; /* Darker red on hover */
+}
+
+.action-btn i {
+    font-size: 18px;
+}
+
+#inventory-container {
+    padding: 20px;
+}
+
+#inventory-container .inventory-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+#inventory-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+#inventory-form input,
+#inventory-form select,
+#inventory-form button {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    flex: 1;
+}
+
+#inventory-form button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#inventory-form button:hover {
+    background-color: #0056b3;
+}
+
+#inventory-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#inventory-table th, #inventory-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+#inventory-table th {
     background-color: #007bff;
     color: white;
 }
 
-.edit-role-btn:hover {
-    background-color: #0056b3;
+#inventory-table tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
-.icon-btn i {
+#inventory-table tr:hover {
+    background-color: #ddd;
+}
+
+#inventory-table .action-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
     font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: background-color 0.3s;
+    margin: 0 5px;
+}
+
+#inventory-table .edit-btn {
+    background-color: #007bff; /* Blue for Edit */
+    color: white;
+}
+
+#inventory-table .edit-btn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+#inventory-table .delete-btn {
+    background-color: #dc3545; /* Red for Delete */
+    color: white;
+}
+
+#inventory-table .delete-btn:hover {
+    background-color: #a71d2a; /* Darker red on hover */
+}
+
+#inventory-table th:last-child, #inventory-table td:last-child {
+    width: 120px;
+    text-align: center;
 }

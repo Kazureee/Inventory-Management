@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Get the buttons and forms
+    // Get the buttons and forms (if necessary)
     const loginForm = document.getElementById("login-form");
     const registrationForm = document.getElementById("registration-form");
 
@@ -35,31 +35,5 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Registration Successful!");
             window.location.href = "login.html"; // Redirect to login page after registration
         });
-    }
-
-    // Toggle buttons for navigation
-    const registerBtn = document.getElementById("register-btn");
-    const loginBtn = document.getElementById("login-btn");
-
-    if (registerBtn) {
-        registerBtn.addEventListener("click", () => {
-            window.location.href = "registration.html";
-        });
-    }
-
-    if (loginBtn) {
-        loginBtn.addEventListener("click", () => {
-            window.location.href = "login.html";
-        });
-    }
-
-    // Set correct button active on page load
-    const currentPage = window.location.pathname;
-    if (currentPage.includes("registration.html")) {
-        document.getElementById("register-btn").classList.add("active");
-        document.getElementById("login-btn").classList.remove("active");
-    } else if (currentPage.includes("login.html")) {
-        document.getElementById("login-btn").classList.add("active");
-        document.getElementById("register-btn").classList.remove("active");
     }
 });

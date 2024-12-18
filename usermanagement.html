@@ -3,17 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>User Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="sidebar-container"></div>
+    <div class="container">
+        <h1>User Management</h1>
+        <!-- Table for users -->
+        <table id="user-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th>Last Login</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Example row -->
+                <tr>
+                    <td>John Doe</td>
+                    <td>johndoe</td>
+                    <td>Admin</td>
+                    <td>2024-12-16 08:30 AM</td>
+                    <td>
+                        <button class="icon-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="icon-btn">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- Additional rows can be added dynamically -->
+            </tbody>
+        </table>
+    </div>
+
     <script>
         fetch("sidebar.html")
             .then(response => response.text())
             .then(data => {
                 document.getElementById("sidebar-container").innerHTML = data;
-
                 const currentPage = window.location.pathname.split("/").pop(); 
                 const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 

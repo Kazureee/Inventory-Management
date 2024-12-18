@@ -20,6 +20,20 @@
                 <option value="Polo">Polo</option>
                 <option value="Jacket">Jacket</option>
                 <option value="Polo Shirt">Polo Shirt</option>
+                <option value="Short">Polo Shirt</option>
+                <option value="Skirt">Polo Shirt</option>
+                <option value="Dress">Polo Shirt</option>
+            </select>
+            <select id="item-size">
+                <option value="S">XXXS</option>
+                <option value="S">XXS</option>
+                <option value="S">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XL">XXL</option>
+                <option value="XL">XXXL</option>
             </select>
             <input type="number" id="item-quantity" placeholder="Quantity" min="1" required>
             <input type="number" id="item-price" placeholder="Price" min="0.01" step="0.01" required>
@@ -34,6 +48,7 @@
                 <tr>
                     <th>Item</th>
                     <th>Type</th>
+                    <th>Size</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Actions</th>
@@ -59,56 +74,60 @@
 
         // Add Item to Inventory
         document.getElementById('inventory-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+    e.preventDefault();
 
-            const itemName = document.getElementById('item-name').value;
-            const itemType = document.getElementById('item-type').value;
-            const itemQuantity = document.getElementById('item-quantity').value;
-            const itemPrice = document.getElementById('item-price').value;
+    const itemName = document.getElementById('item-name').value;
+    const itemType = document.getElementById('item-type').value;
+    const itemSize = document.getElementById('item-size').value; // Get Size
+    const itemQuantity = document.getElementById('item-quantity').value;
+    const itemPrice = document.getElementById('item-price').value;
 
-            if (itemName && itemType && itemQuantity && itemPrice) {
-                const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
+    if (itemName && itemType && itemSize && itemQuantity && itemPrice) {
+        const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
 
-                const newRow = tableBody.insertRow(tableBody.rows.length);
+        const newRow = tableBody.insertRow(tableBody.rows.length);
 
-                const cell1 = newRow.insertCell(0);
-                const cell2 = newRow.insertCell(1);
-                const cell3 = newRow.insertCell(2);
-                const cell4 = newRow.insertCell(3);
-                const cell5 = newRow.insertCell(4);
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2); // Size Column
+        const cell4 = newRow.insertCell(3);
+        const cell5 = newRow.insertCell(4);
+        const cell6 = newRow.insertCell(5);
 
-                cell1.textContent = itemName;
-                cell2.textContent = itemType;
-                cell3.textContent = itemQuantity;
-                cell4.textContent = `$${parseFloat(itemPrice).toFixed(2)}`;
+        cell1.textContent = itemName;
+        cell2.textContent = itemType;
+        cell3.textContent = itemSize; // Add Size
+        cell4.textContent = itemQuantity;
+        cell5.textContent = `$${parseFloat(itemPrice).toFixed(2)}`;
 
-                // Edit button functionality
-                const editButton = document.createElement('button');
-                editButton.classList.add('action-btn', 'edit-btn');
-                editButton.innerHTML = '<i class="fas fa-edit"></i>';
-                editButton.addEventListener('click', function() {
-                    document.getElementById('item-name').value = itemName;
-                    document.getElementById('item-type').value = itemType;
-                    document.getElementById('item-quantity').value = itemQuantity;
-                    document.getElementById('item-price').value = itemPrice;
+        // Edit button functionality
+        const editButton = document.createElement('button');
+        editButton.classList.add('action-btn', 'edit-btn');
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.addEventListener('click', function() {
+            document.getElementById('item-name').value = itemName;
+            document.getElementById('item-type').value = itemType;
+            document.getElementById('item-size').value = itemSize; // Include Size
+            document.getElementById('item-quantity').value = itemQuantity;
+            document.getElementById('item-price').value = itemPrice;
 
-                    // Remove row after editing
-                    tableBody.deleteRow(newRow.rowIndex - 1);
-                });
-
-                // Delete button functionality
-                const deleteButton = document.createElement('button');
-                deleteButton.classList.add('action-btn', 'delete-btn');
-                deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-                deleteButton.addEventListener('click', function() {
-                    tableBody.deleteRow(newRow.rowIndex - 1);
-                });
-
-                cell5.appendChild(editButton);
-                cell5.appendChild(deleteButton);
-
-                document.getElementById('inventory-form').reset();
-            }
+            // Remove row after editing
+            tableBody.deleteRow(newRow.rowIndex - 1);
         });
+
+        // Delete button functionality
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('action-btn', 'delete-btn');
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteButton.addEventListener('click', function() {
+            tableBody.deleteRow(newRow.rowIndex - 1);
+        });
+
+        cell6.appendChild(editButton);
+        cell6.appendChild(deleteButton);
+
+        document.getElementById('inventory-form').reset();
+    }
+});
     </script>
 </body>

@@ -112,8 +112,8 @@ document.addEventListener("DOMContentLoaded", () => {
         cell2.textContent = itemType;
         cell3.textContent = itemSize; // Add Size
         cell4.textContent = itemQuantity;
-        cell5.textContent = `$${parseFloat(itemPrice).toFixed(2)}`;
-        cell6.textContent = `$${totalAmount.toFixed(2)}`; 
+        cell5.textContent = `₱${parseFloat(itemPrice).toFixed(2)}`;  // Change $ to ₱
+        cell6.textContent = `₱${totalAmount.toFixed(2)}`;  // Change $ to ₱
 
         // Edit button functionality
         const editButton = document.createElement('button');

@@ -1,13 +1,36 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Toggle Buttons
+    // Sidebar fetch and display
+    fetch("sidebar.html")
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Failed to load sidebar HTML.');
+        }
+        return response.text();
+    })
+    .then(data => {
+        document.getElementById("sidebar-container").innerHTML = data;
+
+        const currentPage = window.location.pathname.split("/").pop(); 
+        const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
+
+        sidebarLinks.forEach(link => {
+            const linkHref = link.getAttribute("href").split("/").pop(); 
+            if (linkHref === currentPage) {
+                link.classList.add("active");
+            } else {
+                link.classList.remove("active");
+            }
+        });
+    })
+    .catch(err => console.error("Error loading sidebar:", err));
+
+    // Toggle Buttons (Login/Registration)
     const loginBtn = document.getElementById("login-btn");
     const registerBtn = document.getElementById("register-btn");
 
-    // Form Containers
     const loginFormContainer = document.getElementById("login-form-container");
     const registrationFormContainer = document.getElementById("registration-form-container");
 
-    // Add event listeners for toggling forms
     loginBtn.addEventListener("click", () => {
         loginBtn.classList.add("active");
         registerBtn.classList.remove("active");
@@ -26,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const loginForm = document.getElementById("login-form");
     const registrationForm = document.getElementById("registration-form");
 
-    // Handle Sign In form submission
     if (loginForm) {
         loginForm.addEventListener("submit", (event) => {
             event.preventDefault();
@@ -36,18 +58,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const adminUsername = "admin";
             const adminPassword = "admin";
     
-            // Check against hardcoded credentials
             if (username === adminUsername && password === adminPassword) {
                 alert("Login successful!");
                 window.location.href = "Home.html"; // Redirect to the home page
             } else {
-                // Check if the user exists with the provided credentials from localStorage
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 const storedUser = users.find(user => user.username === username && user.password === password);
     
                 if (storedUser) {
                     alert("Login successful!");
-                    window.location.href = "Home.html"; // Redirect to the home page
+                    window.location.href = "Home.html";
                 } else {
                     alert("Invalid login credentials!");
                 }
@@ -55,114 +75,85 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Handle Registration form submission
     if (registrationForm) {
         registrationForm.addEventListener("submit", (event) => {
             event.preventDefault();
             const username = document.getElementById("reg-username").value;
             const password = document.getElementById("reg-password").value;
 
-            // Get existing users from localStorage or initialize an empty array
             const users = JSON.parse(localStorage.getItem("users")) || [];
 
-            // Check if the username already exists
             const existingUser  = users.find(user => user.username === username);
             if (existingUser ) {
                 alert("Username already exists. Please choose a different one.");
                 return;
             }
 
-            // Add the new user to the array
             users.push({ username, password, role: "User ", lastLogin: null });
-
-            // Save the updated users array back to localStorage
             localStorage.setItem("users", JSON.stringify(users));
 
             alert("Registration Successful!");
-            window.location.href = "login.html"; // Redirect to login page after registration
+            window.location.href = "login.html"; 
         });
     }
-});
- // Add Item to Inventory
- document.getElementById('inventory-form').addEventListener('submit', function(e) {
-    e.preventDefault();
 
-    const itemName = document.getElementById('item-name').value;
-    const itemType = document.getElementById('item-type').value;
-    const itemSize = document.getElementById('item-size').value; // Get Size
-    const itemQuantity = document.getElementById('item-quantity').value;
-    const itemPrice = document.getElementById('item-price').value;
+    // Add Item to Inventory
+    document.getElementById('inventory-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    if (itemName && itemType && itemSize && itemQuantity && itemPrice) {
-        const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
+        const itemName = document.getElementById('item-name').value;
+        const itemType = document.getElementById('item-type').value;
+        const itemSize = document.getElementById('item-size').value;
+        const itemQuantity = document.getElementById('item-quantity').value;
+        const itemPrice = document.getElementById('item-price').value;
 
-        const newRow = tableBody.insertRow(tableBody.rows.length);
+        if (itemName && itemType && itemSize && itemQuantity && itemPrice) {
+            const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
 
-        const cell1 = newRow.insertCell(0);
-        const cell2 = newRow.insertCell(1);
-        const cell3 = newRow.insertCell(2); 
-        const cell4 = newRow.insertCell(3);
-        const cell5 = newRow.insertCell(4);
-        const cell6 = newRow.insertCell(5);
-        const cell7 = newRow.insertCell(6);
+            const newRow = tableBody.insertRow(tableBody.rows.length);
 
-        const totalAmount = parseFloat(itemQuantity) * parseFloat(itemPrice);
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2); 
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+            const cell6 = newRow.insertCell(5);
+            const cell7 = newRow.insertCell(6);
 
-        cell1.textContent = itemName;
-        cell2.textContent = itemType;
-        cell3.textContent = itemSize; // Add Size
-        cell4.textContent = itemQuantity;
-        cell5.textContent = `₱${parseFloat(itemPrice).toFixed(2)}`;  // Change $ to ₱
-        cell6.textContent = `₱${totalAmount.toFixed(2)}`;  // Change $ to ₱
+            const totalAmount = parseFloat(itemQuantity) * parseFloat(itemPrice);
 
-        // Edit button functionality
-        const editButton = document.createElement('button');
-        editButton.classList.add('action-btn', 'edit-btn');
-        editButton.innerHTML = '<i class="fas fa-edit"></i>';
-        editButton.addEventListener('click', function() {
-            document.getElementById('item-name').value = itemName;
-            document.getElementById('item-type').value = itemType;
-            document.getElementById('item-size').value = itemSize; // Include Size
-            document.getElementById('item-quantity').value = itemQuantity;
-            document.getElementById('item-price').value = itemPrice;
+            cell1.textContent = itemName;
+            cell2.textContent = itemType;
+            cell3.textContent = itemSize;
+            cell4.textContent = itemQuantity;
+            cell5.textContent = `₱${parseFloat(itemPrice).toFixed(2)}`;
+            cell6.textContent = `₱${totalAmount.toFixed(2)}`;
 
-            // Remove row after editing
-            tableBody.deleteRow(newRow.rowIndex - 1);
-        });
+            // Edit and Delete functionality
+            const editButton = document.createElement('button');
+            editButton.classList.add('action-btn', 'edit-btn');
+            editButton.innerHTML = '<i class="fas fa-edit"></i>';
+            editButton.addEventListener('click', function() {
+                document.getElementById('item-name').value = itemName;
+                document.getElementById('item-type').value = itemType;
+                document.getElementById('item-size').value = itemSize;
+                document.getElementById('item-quantity').value = itemQuantity;
+                document.getElementById('item-price').value = itemPrice;
 
-        // Delete button functionality
-        const deleteButton = document.createElement('button');
-        deleteButton.classList.add('action-btn', 'delete-btn');
-        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-        deleteButton.addEventListener('click', function() {
-            tableBody.deleteRow(newRow.rowIndex - 1);
-        });
+                tableBody.deleteRow(newRow.rowIndex - 1);
+            });
 
-        cell7.appendChild(editButton);
-        cell7.appendChild(deleteButton);
+            const deleteButton = document.createElement('button');
+            deleteButton.classList.add('action-btn', 'delete-btn');
+            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+            deleteButton.addEventListener('click', function() {
+                tableBody.deleteRow(newRow.rowIndex - 1);
+            });
 
-        document.getElementById('inventory-form').reset();
-    }
-});
+            cell7.appendChild(editButton);
+            cell7.appendChild(deleteButton);
 
-fetch("sidebar.html")
-.then(response => response.text())
-.then(data => {
-    document.getElementById("sidebar-container").innerHTML = data;
-
-    const currentPage = window.location.pathname.split("/").pop(); 
-    const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
-
-    sidebarLinks.forEach(link => {
-        const linkHref = link.getAttribute("href").split("/").pop(); 
-        if (linkHref === currentPage) {
-            link.classList.add("active");
-        } else {
-            link.classList.remove("active");
+            document.getElementById('inventory-form').reset();
         }
     });
-})
-.catch(err => console.error("Error loading sidebar:", err));
-
-
-
+});

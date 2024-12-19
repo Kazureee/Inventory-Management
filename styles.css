@@ -91,6 +91,7 @@
         margin-left: 250px;
         padding: 20px;
         flex: 1;
+        min-height: 100vh; 
     }
 
     h1 {
@@ -462,4 +463,129 @@
         transform: translateY(-50%);
         pointer-events: none; /* Allow clicks on the select element */
     }
+
+/* Homepage Design */
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.homepage-container h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.homepage-container p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.homepage-container .cta-button {
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.homepage-container .cta-button:hover {
+    background-color: #0056b3;
+}
+
+.homepage-container .inventory-summary {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 40px;
+}
+
+/* Fix for layout overlap with sidebar */
+.homepage-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    padding: 20px;
+    text-align: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-left: 250px; /* Ensure space for sidebar */
+    width: calc(100% - 250px); /* Adjust width to fill the remaining space */
+}
+
+.homepage-container h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.homepage-container p {
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+.homepage-container .cta-button {
+    padding: 15px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.homepage-container .cta-button:hover {
+    background-color: #0056b3;
+}
+
+.homepage-container .inventory-summary {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 40px;
+}
+
+.homepage-container .inventory-summary .summary-card {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: 25%;
+    text-align: center;
+}
+
+.homepage-container .inventory-summary .summary-card h3 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.homepage-container .inventory-summary .summary-card p {
+    font-size: 18px;
+    color: #333;
+}
+
+.homepage-container .footer {
+    margin-top:   28%;
+    font-size: 14px;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+
+}
 

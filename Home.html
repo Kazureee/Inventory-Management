@@ -9,12 +9,31 @@
 <body>
     <div id="sidebar-container"></div>
 
-    <div class="container">
-        <h1>Welcome to the Dashboard</h1>
-        <p>This is the Dashboard page content.</p>
-
+    <div class="homepage-container">
+        <h1>Welcome to BNK Clothing Shop Dashboard</h1>
+        <p>Manage your inventory efficiently and keep track of your stock.</p>
+        <button class="cta-button">Get Started</button>
+    
+        <div class="inventory-summary">
+            <div class="summary-card">
+                <h3 class="card-title">Total Items</h3>
+                <p class="card-value">500</p>
+            </div>
+            <div class="summary-card">
+                <h3 class="card-title">Low Stock</h3>
+                <p class="card-value">15</p>
+            </div>
+            <div class="summary-card">
+                <h3 class="card-title">Total Value</h3>
+                <p class="card-value">$12,500</p>
+            </div>
+        </div>
+    
+        <div class="footer">
+            <p>&copy; 2024 BNK Clothing. All Rights Reserved.</p>
+        </div>
     </div>
-
+    
     <script>
         fetch("sidebar.html")
             .then(response => response.text())

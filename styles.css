@@ -116,7 +116,16 @@
         background-color: #007bff;
         color: white;
     }
+    th:nth-child(1), td:nth-child(1) {
+        width: 400px;
+    }
 
+    th:last-child, td:last-child {
+        width: 120px; /* Adjust width for action buttons */
+        text-align: center; /* Center align the action buttons */
+    }
+    
+    
     tr:nth-child(even) {
         background-color: #f2f2f2;
     }

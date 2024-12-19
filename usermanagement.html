@@ -32,7 +32,7 @@
             <input type="text" id="edit-name" placeholder="Name" required>
             <input type="text" id="edit-username" placeholder="Username" required>
             <select id="edit-role">
-                <option value="User ">User </option>
+                <option value="User">User</option>
                 <option value="Admin">Admin</option>
             </select>
             <button type="submit">Save Changes</button>
@@ -70,7 +70,10 @@
                 row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
                 row.insertCell(1).innerText = user.username;
                 row.insertCell(2).innerText = user.role;
-                row.insertCell(3).innerHTML = '<button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>'; // Add delete button
+                row.insertCell(3).innerHTML = `
+                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i> </button>
+                    <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i> </button>
+                `; // Add icons for edit and delete buttons with same style
             });
         }
 
@@ -104,36 +107,36 @@
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 const userToEdit = users.find(user => user.username === username);
 
-if (userToEdit) {
-    document.getElementById("edit-name").value = userToEdit.name;
-    document.getElementById("edit-username").value = userToEdit.username;
-    document.getElementById("edit-role").value = userToEdit.role;
+                if (userToEdit) {
+                    document.getElementById("edit-name").value = userToEdit.name;
+                    document.getElementById("edit-username").value = userToEdit.username;
+                    document.getElementById("edit-role").value = userToEdit.role;
 
-    document.getElementById("edit-user-modal").style.display = "block";
+                    document.getElementById("edit-user-modal").style.display = "block";
 
-    document.getElementById("edit-user-form").onsubmit = (e) => {
-        e.preventDefault();
+                    document.getElementById("edit-user-form").onsubmit = (e) => {
+                        e.preventDefault();
 
-        userToEdit.name = document.getElementById("edit-name").value;
-        userToEdit.username = document.getElementById("edit-username").value;
-        userToEdit.role = document.getElementById("edit-role").value;
+                        userToEdit.name = document.getElementById("edit-name").value;
+                        userToEdit.username = document.getElementById("edit-username").value;
+                        userToEdit.role = document.getElementById("edit-role").value;
 
-        localStorage.setItem("users", JSON.stringify(users));
+                        localStorage.setItem("users", JSON.stringify(users));
 
+                        loadUsers();
+                        document.getElementById("edit-user-modal").style.display = "none";
+                    };
+                }
+            }
+        });
+
+        // Close modal on cancel button
+        document.getElementById("close-modal").addEventListener("click", () => {
+            document.getElementById("edit-user-modal").style.display = "none";
+        });
+
+        // Initial load of users
         loadUsers();
-        document.getElementById("edit-user-modal").style.display = "none";
-    };
-}
-}
-});
-
-// Close modal on cancel button
-document.getElementById("close-modal").addEventListener("click", () => {
-document.getElementById("edit-user-modal").style.display = "none";
-});
-
-// Initial load of users
-loadUsers();
-</script>
+    </script>
 </body>
 </html>

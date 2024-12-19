@@ -51,12 +51,12 @@
 
             users.forEach(user => {
                 const row = userTableBody.insertRow();
-                row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
+                row.insertCell(0).innerText = user.name || "N/A";
                 row.insertCell(1).innerText = user.username;
                 row.insertCell(2).innerText = user.role;
                 row.insertCell(3).innerHTML = `
-                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i> </button>
-                    <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i> </button>
+                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                    <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
                 `;
                 row.dataset.username = user.username; // Store username in data attribute
             });
@@ -67,59 +67,48 @@
 
         // Event delegation for Edit and Delete buttons
         document.getElementById("user-table").addEventListener('click', (event) => {
-            if (event.target.classList.contains('edit-btn')) {
-                const row = event.target.closest('tr');
+            const target = event.target.closest('.action-btn'); // Ensure you handle clicks on buttons and icons
+            if (!target) return; // Exit if the clicked element is not a button or inside a button
+
+            if (target.classList.contains('edit-btn')) {
+                const row = target.closest('tr');
                 const username = row.dataset.username;
 
-                // Retrieve users from localStorage
                 const users = JSON.parse(localStorage.getItem("users")) || [];
                 const userToEdit = users.find(user => user.username === username);
 
                 if (userToEdit) {
-                    // Fill modal with user data
                     document.getElementById("edit-name").value = userToEdit.name;
                     document.getElementById("edit-username").value = userToEdit.username;
                     document.getElementById("edit-role").value = userToEdit.role;
 
-                    // Show the modal
                     document.getElementById("edit-user-modal").style.display = "block";
 
-                    // Handle form submission
                     document.getElementById("edit-user-form").onsubmit = (e) => {
                         e.preventDefault();
 
-                        // Update the user object
                         userToEdit.name = document.getElementById("edit-name").value;
                         userToEdit.username = document.getElementById("edit-username").value;
                         userToEdit.role = document.getElementById("edit-role").value;
 
-                        // Save updated users back to localStorage
                         localStorage.setItem("users", JSON.stringify(users));
 
-                        // Reload the table with updated data
                         loadUsers();
 
-                        // Hide the modal
                         document.getElementById("edit-user-modal").style.display = "none";
                     };
                 }
             }
 
-            if (event.target.classList.contains('delete-btn')) {
-                const row = event.target.closest('tr');
+            if (target.classList.contains('delete-btn')) {
+                const row = target.closest('tr');
                 const username = row.dataset.username;
 
                 if (confirm(`Are you sure you want to delete user: ${username}?`)) {
-                    // Retrieve users from localStorage
                     const users = JSON.parse(localStorage.getItem("users")) || [];
-                    
-                    // Filter out the user to delete
                     const updatedUsers = users.filter(user => user.username !== username);
-                    
-                    // Save the updated list back to localStorage
                     localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-                    // Remove the row from the table
                     row.remove();
                 }
             }
@@ -132,14 +121,19 @@
 
         // Load sidebar dynamically
         fetch("sidebar.html")
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) throw new Error("Sidebar file not found");
+                return response.text();
+            })
             .then(data => {
                 document.getElementById("sidebar-container").innerHTML = data;
-                const currentPage = window.location.pathname.split("/").pop(); 
+
+                // Highlight the active menu link
+                const currentPage = window.location.pathname.split("/").pop();
                 const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
                 sidebarLinks.forEach(link => {
-                    const linkHref = link.getAttribute("href").split("/").pop(); 
+                    const linkHref = link.getAttribute("href").split("/").pop();
                     if (linkHref === currentPage) {
                         link.classList.add("active");
                     } else {

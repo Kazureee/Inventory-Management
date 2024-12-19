@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then(data => {
         document.getElementById("sidebar-container").innerHTML = data;
 
-        const currentPage = window.location.pathname.split("/").pop(); 
+        const currentPage = window.location.pathname.split("/").pop();
         const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
         sidebarLinks.forEach(link => {
@@ -84,12 +84,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const users = JSON.parse(localStorage.getItem("users")) || [];
 
             const existingUser  = users.find(user => user.username === username);
-            if (existingUser ) {
+            if (existingUser) {
                 alert("Username already exists. Please choose a different one.");
                 return;
             }
 
-            users.push({ username, password, role: "User ", lastLogin: null });
+            users.push({ username, password, role: "User", lastLogin: null });
             localStorage.setItem("users", JSON.stringify(users));
 
             alert("Registration Successful!");
@@ -107,53 +107,93 @@ document.addEventListener("DOMContentLoaded", () => {
         const itemQuantity = document.getElementById('item-quantity').value;
         const itemPrice = document.getElementById('item-price').value;
 
-        if (itemName && itemType && itemSize && itemQuantity && itemPrice) {
-            const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
-
-            const newRow = tableBody.insertRow(tableBody.rows.length);
-
-            const cell1 = newRow.insertCell(0);
-            const cell2 = newRow.insertCell(1);
-            const cell3 = newRow.insertCell(2); 
-            const cell4 = newRow.insertCell(3);
-            const cell5 = newRow.insertCell(4);
-            const cell6 = newRow.insertCell(5);
-            const cell7 = newRow.insertCell(6);
-
-            const totalAmount = parseFloat(itemQuantity) * parseFloat(itemPrice);
-
-            cell1.textContent = itemName;
-            cell2.textContent = itemType;
-            cell3.textContent = itemSize;
-            cell4.textContent = itemQuantity;
-            cell5.textContent = `₱${parseFloat(itemPrice).toFixed(2)}`;
-            cell6.textContent = `₱${totalAmount.toFixed(2)}`;
-
-            // Edit and Delete functionality
-            const editButton = document.createElement('button');
-            editButton.classList.add('action-btn', 'edit-btn');
-            editButton.innerHTML = '<i class="fas fa-edit"></i>';
-            editButton.addEventListener('click', function() {
-                document.getElementById('item-name').value = itemName;
-                document.getElementById('item-type').value = itemType;
-                document.getElementById('item-size').value = itemSize;
-                document.getElementById('item-quantity').value = itemQuantity;
-                document.getElementById('item-price').value = itemPrice;
-
-                tableBody.deleteRow(newRow.rowIndex - 1);
-            });
-
-            const deleteButton = document.createElement('button');
-            deleteButton.classList.add('action-btn', 'delete-btn');
-            deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
-            deleteButton.addEventListener('click', function() {
-                tableBody.deleteRow(newRow.rowIndex - 1);
-            });
-
-            cell7.appendChild(editButton);
-            cell7.appendChild(deleteButton);
-
-            document.getElementById('inventory-form').reset();
+        if (!itemName || !itemType || !itemSize || !itemQuantity || !itemPrice) {
+            alert("All fields must be filled.");
+            return;
         }
+
+        // Ensure itemQuantity and itemPrice are numbers
+        if (isNaN(itemQuantity) || isNaN(itemPrice)) {
+            alert("Quantity and price must be valid numbers.");
+            return;
+        }
+
+        const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
+
+        const newRow = tableBody.insertRow(tableBody.rows.length);
+
+        const cell1 = newRow.insertCell(0);
+        const cell2 = newRow.insertCell(1);
+        const cell3 = newRow.insertCell(2); 
+        const cell4 = newRow.insertCell(3);
+        const cell5 = newRow.insertCell(4);
+        const cell6 = newRow.insertCell(5);
+        const cell7 = newRow.insertCell(6);
+
+        const totalAmount = parseFloat(itemQuantity) * parseFloat(itemPrice);
+
+        cell1.textContent = itemName;
+        cell2.textContent = itemType;
+        cell3.textContent = itemSize;
+        cell4.textContent = itemQuantity;
+        cell5.textContent = `₱${parseFloat(itemPrice).toFixed(2)}`;
+        cell6.textContent = `₱${totalAmount.toFixed(2)}`;
+
+        // Edit and Delete functionality
+        const editButton = document.createElement('button');
+        editButton.classList.add('action-btn', 'edit-btn');
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.addEventListener('click', function() {
+            document.getElementById('item-name').value = itemName;
+            document.getElementById('item-type').value = itemType;
+            document.getElementById('item-size').value = itemSize;
+            document.getElementById('item-quantity').value = itemQuantity;
+            document.getElementById('item-price').value = itemPrice;
+
+            tableBody.deleteRow(newRow.rowIndex);
+        });
+
+        const deleteButton = document.createElement('button');
+        deleteButton.classList.add('action-btn', 'delete-btn');
+        deleteButton.innerHTML = '<i class="fas fa-trash"></i>';
+        deleteButton.addEventListener('click', function() {
+            tableBody.deleteRow(newRow.rowIndex);
+        });
+
+        cell7.appendChild(editButton);
+        cell7.appendChild(deleteButton);
+
+        document.getElementById('inventory-form').reset();
     });
 });
+
+// Function to load inventory from the database (for display)
+function loadInventory() {
+    fetch('get_inventory.php')  // This file should return the inventory data in JSON format
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#inventory-table tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.item_name}</td>
+                    <td>${item.item_type}</td>
+                    <td>${item.item_size}</td>
+                    <td>${item.item_quantity}</td>
+                    <td>${item.item_price}</td>
+                    <td>${(item.item_quantity * item.item_price).toFixed(2)}</td>
+                    <td>
+                        <button class="edit-btn"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="delete-btn"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Failed to load inventory data.');
+        });
+}

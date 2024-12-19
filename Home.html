@@ -3,37 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Admin Dashboard - BNK Clothing Shop</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="sidebar-container"></div>
 
-    <div class="homepage-container">
-        <h1>Welcome to BNK Clothing Shop Dashboard</h1>
-        <p>Manage your inventory efficiently and keep track of your stock.</p>
-        <button class="cta-button">Get Started</button>
-    
-        <div class="inventory-summary">
-            <div class="summary-card">
-                <h3 class="card-title">Total Items</h3>
-                <p class="card-value">500</p>
-            </div>
-            <div class="summary-card">
-                <h3 class="card-title">Low Stock</h3>
-                <p class="card-value">15</p>
-            </div>
-            <div class="summary-card">
-                <h3 class="card-title">Total Value</h3>
-                <p class="card-value">₱12,500</p>
-            </div>
-        </div>
-    
-        <div class="footer">
+    <div class="admin-container">
+        <header class="admin-header">
+            <h1>Welcome Back, Admin!</h1>
+            <p>Your dashboard at BNK Clothing Shop is ready to help you manage everything.</p>
+        </header>
+
+        <section class="admin-welcome">
+            <h2>Dashboard Overview</h2>
+            <p>From here, you can oversee the entire store, manage products, track orders, and review customer insights. Everything you need is just a click away!</p>
+        </section>
+
+        <footer class="footer">
             <p>&copy; 2024 BNK Clothing. All Rights Reserved.</p>
-        </div>
+        </footer>
     </div>
-    
+
     <script>
         fetch("sidebar.html")
             .then(response => response.text())

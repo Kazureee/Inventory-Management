@@ -1,32 +1,30 @@
 <?php
-// Database connection
-$servername = "localhost";
-$username = "root";
-$password = "";
-$dbname = "inventory_management";
+// Your database connection code here
+header('Content-Type: application/json');
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
+// Example: Query to fetch inventory data from your database
+$connection = new mysqli('localhost', 'username', 'password', 'database_name');
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+if ($connection->connect_error) {
+    die("Connection failed: " . $connection->connect_error);
 }
 
-// Query to retrieve inventory data
-$sql = "SELECT * FROM inventory";
-$result = $conn->query($sql);
+// Example query to fetch data
+$sql = "SELECT * FROM inventory_table"; // Replace with your actual table and columns
+$result = $connection->query($sql);
 
-$items = [];
 if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $items[] = $row;  // Add each item to the items array
+    $inventoryData = [];
+
+    while($row = $result->fetch_assoc()) {
+        $inventoryData[] = $row;
     }
-    echo json_encode(["success" => true, "items" => $items]);  // Return data as JSON
+
+    // Send JSON response
+    echo json_encode($inventoryData);
 } else {
-    echo json_encode(["success" => false, "message" => "No items found"]);
+    echo json_encode([]);  // Return an empty array if no data
 }
 
-// Close connection
-$conn->close();
+$connection->close();
 ?>

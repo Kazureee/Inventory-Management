@@ -22,10 +22,12 @@
                 </tr>
             </thead>
             <tbody>
-                
+                <!-- Users will be loaded dynamically here -->
             </tbody>
         </table>
     </div>
+    
+    <!-- Edit User Modal -->
     <div id="edit-user-modal" style="display: none;">
         <h2>Edit User</h2>
         <form id="edit-user-form">
@@ -39,7 +41,95 @@
             <button type="button" id="close-modal">Cancel</button>
         </form>
     </div>
+
     <script>
+        // Function to load users from localStorage and display them in the table
+        function loadUsers() {
+            const users = JSON.parse(localStorage.getItem("users")) || [];
+            const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+            userTableBody.innerHTML = ''; // Clear existing rows
+
+            users.forEach(user => {
+                const row = userTableBody.insertRow();
+                row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
+                row.insertCell(1).innerText = user.username;
+                row.insertCell(2).innerText = user.role;
+                row.insertCell(3).innerHTML = `
+                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i> </button>
+                    <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i> </button>
+                `;
+                row.dataset.username = user.username; // Store username in data attribute
+            });
+        }
+
+        // Initial load of users
+        loadUsers();
+
+        // Event delegation for Edit and Delete buttons
+        document.getElementById("user-table").addEventListener('click', (event) => {
+            if (event.target.classList.contains('edit-btn')) {
+                const row = event.target.closest('tr');
+                const username = row.dataset.username;
+
+                // Retrieve users from localStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const userToEdit = users.find(user => user.username === username);
+
+                if (userToEdit) {
+                    // Fill modal with user data
+                    document.getElementById("edit-name").value = userToEdit.name;
+                    document.getElementById("edit-username").value = userToEdit.username;
+                    document.getElementById("edit-role").value = userToEdit.role;
+
+                    // Show the modal
+                    document.getElementById("edit-user-modal").style.display = "block";
+
+                    // Handle form submission
+                    document.getElementById("edit-user-form").onsubmit = (e) => {
+                        e.preventDefault();
+
+                        // Update the user object
+                        userToEdit.name = document.getElementById("edit-name").value;
+                        userToEdit.username = document.getElementById("edit-username").value;
+                        userToEdit.role = document.getElementById("edit-role").value;
+
+                        // Save updated users back to localStorage
+                        localStorage.setItem("users", JSON.stringify(users));
+
+                        // Reload the table with updated data
+                        loadUsers();
+
+                        // Hide the modal
+                        document.getElementById("edit-user-modal").style.display = "none";
+                    };
+                }
+            }
+
+            if (event.target.classList.contains('delete-btn')) {
+                const row = event.target.closest('tr');
+                const username = row.dataset.username;
+
+                if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+                    // Retrieve users from localStorage
+                    const users = JSON.parse(localStorage.getItem("users")) || [];
+                    
+                    // Filter out the user to delete
+                    const updatedUsers = users.filter(user => user.username !== username);
+                    
+                    // Save the updated list back to localStorage
+                    localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+                    // Remove the row from the table
+                    row.remove();
+                }
+            }
+        });
+
+        // Close modal on cancel button
+        document.getElementById("close-modal").addEventListener("click", () => {
+            document.getElementById("edit-user-modal").style.display = "none";
+        });
+
         // Load sidebar dynamically
         fetch("sidebar.html")
             .then(response => response.text())
@@ -58,85 +148,6 @@
                 });
             })
             .catch(err => console.error("Error loading sidebar:", err));
-
-        // Function to load users from localStorage and display them in the table
-        function loadUsers() {
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-            const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-            userTableBody.innerHTML = ''; // Clear existing rows
-
-            users.forEach(user => {
-                const row = userTableBody.insertRow();
-                row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
-                row.insertCell(1).innerText = user.username;
-                row.insertCell(2).innerText = user.role;
-                row.insertCell(3).innerHTML = `
-                    <button class="action-btn edit-btn"><i class="fas fa-edit"></i> </button>
-                    <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i> </button>
-                `; // Add icons for edit and delete buttons with same style
-            });
-        }
-
-        // Initial load of users
-        loadUsers();
-
-        // Optional: Add functionality to delete users
-        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-        userTableBody.addEventListener('click', (event) => {
-            if (event.target.classList.contains('delete-btn')) {
-                const row = event.target.closest('tr');
-                const username = row.cells[1].innerText; // Get the username from the row
-
-                // Retrieve existing users from localStorage
-                const users = JSON.parse(localStorage.getItem("users")) || [];
-
-                // Filter out the deleted user
-                const updatedUsers = users.filter(user => user.username !== username);
-                localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-                // Remove the row from the table
-                userTableBody.removeChild(row);
-            }
-        });
-
-        userTableBody.addEventListener('click', (event) => {
-            if (event.target.classList.contains('edit-btn')) {
-                const row = event.target.closest('tr');
-                const username = row.cells[1].innerText;
-
-                const users = JSON.parse(localStorage.getItem("users")) || [];
-                const userToEdit = users.find(user => user.username === username);
-
-                if (userToEdit) {
-                    document.getElementById("edit-name").value = userToEdit.name;
-                    document.getElementById("edit-username").value = userToEdit.username;
-                    document.getElementById("edit-role").value = userToEdit.role;
-
-                    document.getElementById("edit-user-modal").style.display = "block";
-
-                    document.getElementById("edit-user-form").onsubmit = (e) => {
-                        e.preventDefault();
-
-                        userToEdit.name = document.getElementById("edit-name").value;
-                        userToEdit.username = document.getElementById("edit-username").value;
-                        userToEdit.role = document.getElementById("edit-role").value;
-
-                        localStorage.setItem("users", JSON.stringify(users));
-
-                        loadUsers();
-                        document.getElementById("edit-user-modal").style.display = "none";
-                    };
-                }
-            }
-        });
-
-        // Close modal on cancel button
-        document.getElementById("close-modal").addEventListener("click", () => {
-            document.getElementById("edit-user-modal").style.display = "none";
-        });
-
-        // Initial load of users
-        loadUsers();
     </script>
 </body>
 </html>

@@ -276,3 +276,178 @@ tr:hover {
 #edit-user-modal button {
     margin: 5px;
 }
+
+/* Login Page Styles */
+.login-page .form-container {
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-page .toggle-box {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.login-page .toggle-option {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.login-page .toggle-option.active {
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.login-page .toggle-option:hover:not(.active) {
+    background: #e0e0e0;
+}
+
+.login-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.login-page form input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-page form button {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.login-page form button:hover {
+    background: #0056b3;
+}
+
+/* Registration Page Styles */
+.registration-page .form-container {
+    /* Use the same styles or tweak as needed */
+    width: 100%;
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.registration-page .toggle-box {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.registration-page .toggle-option {
+    flex: 1;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    background: #f0f0f0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.registration-page .toggle-option.active {
+    background: #007bff;
+    color: white;
+    border: none;
+}
+
+.registration-page .toggle-option:hover:not(.active) {
+    background: #e0e0e0;
+}
+
+.registration-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.registration-page form input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.registration-page form button {
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    background: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.registration-page form button:hover {
+    background: #0056b3;
+}
+
+/* Dropdown (Select) Styles */
+.registration-page form select {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #333;
+    appearance: none; /* Removes default dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.registration-page form select:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none;
+}
+
+.registration-page form select option {
+    padding: 10px;
+}
+
+/* Optional: Custom dropdown arrow */
+.registration-page form select::after {
+    content: '\25BC'; /* Downwards triangle symbol */
+    font-size: 12px;
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Allow clicks on the select element */
+}
+

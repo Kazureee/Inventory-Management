@@ -18,7 +18,6 @@
                     <th>Name</th>
                     <th>Username</th>
                     <th>Role</th>
-                    <th>Last Login</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -28,119 +27,109 @@
         </table>
     </div>
     <div id="edit-user-modal" style="display: none;">
-    <h2>Edit User</h2>
-    <form id="edit-user-form">
-        <input type="text" id="edit-name" placeholder="Name" required>
-        <input type="text" id="edit-username" placeholder="Username" required>
-        <select id="edit-role">
-            <option value="User ">User </option>
-            <option value="Admin">Admin</option>
-        </select>
-        <button type="submit">Save Changes</button>
-        <button type="button" id="close-modal">Cancel</button>
-    </form>
-</div>
-<script>
-    // Load sidebar dynamically
-    fetch("sidebar.html")
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("sidebar-container").innerHTML = data;
-            const currentPage = window.location.pathname.split("/").pop(); 
-            const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
+        <h2>Edit User</h2>
+        <form id="edit-user-form">
+            <input type="text" id="edit-name" placeholder="Name" required>
+            <input type="text" id="edit-username" placeholder="Username" required>
+            <select id="edit-role">
+                <option value="User ">User </option>
+                <option value="Admin">Admin</option>
+            </select>
+            <button type="submit">Save Changes</button>
+            <button type="button" id="close-modal">Cancel</button>
+        </form>
+    </div>
+    <script>
+        // Load sidebar dynamically
+        fetch("sidebar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("sidebar-container").innerHTML = data;
+                const currentPage = window.location.pathname.split("/").pop(); 
+                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
-            sidebarLinks.forEach(link => {
-                const linkHref = link.getAttribute("href").split("/").pop(); 
-                if (linkHref === currentPage) {
-                    link.classList.add("active");
-                } else {
-                    link.classList.remove("active");
-                }
-            });
-        })
-        .catch(err => console.error("Error loading sidebar:", err));
+                sidebarLinks.forEach(link => {
+                    const linkHref = link.getAttribute("href").split("/").pop(); 
+                    if (linkHref === currentPage) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            })
+            .catch(err => console.error("Error loading sidebar:", err));
 
-    // Function to load users from localStorage and display them in the table
-    function loadUsers() {
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-        userTableBody.innerHTML = ''; // Clear existing rows
-
-        users.forEach(user => {
-            const row = userTableBody.insertRow();
-            row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
-            row.insertCell(1).innerText = user.username;
-            row.insertCell(2).innerText = user.role;
-            row.insertCell(3).innerText = user.lastLogin || "Never"; // Default to "Never" if no last login
-            row.insertCell(4).innerHTML = '<button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>'; // Add delete button
-        });
-    }
-
-    // Initial load of users
-    loadUsers();
-
-    // Optional: Add functionality to delete users
-    const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-    userTableBody.addEventListener('click', (event) => {
-        if (event.target.classList.contains('delete-btn')) {
-            const row = event.target.closest('tr');
-            const username = row.cells[1].innerText; // Get the username from the row
-
-            // Retrieve existing users from localStorage
+        // Function to load users from localStorage and display them in the table
+        function loadUsers() {
             const users = JSON.parse(localStorage.getItem("users")) || [];
+            const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+            userTableBody.innerHTML = ''; // Clear existing rows
 
-            // Filter out the deleted user
-            const updatedUsers = users.filter(user => user.username !== username);
-            localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-            // Remove the row from the table
-            userTableBody.removeChild(row);
+            users.forEach(user => {
+                const row = userTableBody.insertRow();
+                row.insertCell(0).innerText = user.name || "N/A"; // Assuming you want to add a name field
+                row.insertCell(1).innerText = user.username;
+                row.insertCell(2).innerText = user.role;
+                row.insertCell(3).innerHTML = '<button class="edit-btn">Edit</button> <button class="delete-btn">Delete</button>'; // Add delete button
+            });
         }
-    });
 
-    userTableBody.addEventListener('click', (event) => {
-    if (event.target.classList.contains('edit-btn')) {
-        const row = event.target.closest('tr');
-        const username = row.cells[1].innerText;
+        // Initial load of users
+        loadUsers();
 
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        const userToEdit = users.find(user => user.username === username);
+        // Optional: Add functionality to delete users
+        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+        userTableBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains('delete-btn')) {
+                const row = event.target.closest('tr');
+                const username = row.cells[1].innerText; // Get the username from the row
 
-        if (userToEdit) {
-            document.getElementById("edit-name").value = userToEdit.name;
-            document.getElementById("edit-username").value = userToEdit.username;
-            document.getElementById("edit-role").value = userToEdit.role;
+                // Retrieve existing users from localStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
 
-            document.getElementById("edit-user-modal").style.display = "block";
+                // Filter out the deleted user
+                const updatedUsers = users.filter(user => user.username !== username);
+                localStorage.setItem("users", JSON.stringify(updatedUsers));
 
-            document.getElementById("edit-user-form").onsubmit = (e) => {
-                e.preventDefault();
+                // Remove the row from the table
+                userTableBody.removeChild(row);
+            }
+        });
 
-                userToEdit.name = document.getElementById("edit-name").value;
-                userToEdit.username = document.getElementById("edit-username").value;
-                userToEdit.role = document.getElementById("edit-role").value;
+        userTableBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains('edit-btn')) {
+                const row = event.target.closest('tr');
+                const username = row.cells[1].innerText;
 
-                localStorage.setItem("users", JSON.stringify(users));
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const userToEdit = users.find(user => user.username === username);
 
-                loadUsers();
-                document.getElementById("edit-user-modal").style.display = "none";
-            };
-        }
-    } else if (event.target.classList.contains('delete-btn')) {
-        const row = event.target.closest('tr');
-        const username = row.cells[1].innerText;
+if (userToEdit) {
+    document.getElementById("edit-name").value = userToEdit.name;
+    document.getElementById("edit-username").value = userToEdit.username;
+    document.getElementById("edit-role").value = userToEdit.role;
 
-        const users = JSON.parse(localStorage.getItem("users")) || [];
-        const updatedUsers = users.filter(user => user.username !== username);
+    document.getElementById("edit-user-modal").style.display = "block";
 
-        localStorage.setItem("users", JSON.stringify(updatedUsers));
-        userTableBody.removeChild(row);
-    }
+    document.getElementById("edit-user-form").onsubmit = (e) => {
+        e.preventDefault();
+
+        userToEdit.name = document.getElementById("edit-name").value;
+        userToEdit.username = document.getElementById("edit-username").value;
+        userToEdit.role = document.getElementById("edit-role").value;
+
+        localStorage.setItem("users", JSON.stringify(users));
+
+        loadUsers();
+        document.getElementById("edit-user-modal").style.display = "none";
+    };
+}
+}
 });
 
 // Close modal on cancel button
 document.getElementById("close-modal").addEventListener("click", () => {
-    document.getElementById("edit-user-modal").style.display = "none";
+document.getElementById("edit-user-modal").style.display = "none";
 });
 
 // Initial load of users

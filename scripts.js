@@ -32,18 +32,25 @@ document.addEventListener("DOMContentLoaded", () => {
             event.preventDefault();
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
-
-            // Retrieve existing users from localStorage
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-
-            // Check if the user exists with the provided credentials
-            const storedUser  = users.find(user => user.username === username && user.password === password);
-
-            if (storedUser ) {
+    
+            const adminUsername = "admin";
+            const adminPassword = "admin";
+    
+            // Check against hardcoded credentials
+            if (username === adminUsername && password === adminPassword) {
                 alert("Login successful!");
-                window.location.href = "Home.html"; 
+                window.location.href = "Home.html"; // Redirect to the home page
             } else {
-                alert("Invalid login credentials!");
+                // Check if the user exists with the provided credentials from localStorage
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const storedUser = users.find(user => user.username === username && user.password === password);
+    
+                if (storedUser) {
+                    alert("Login successful!");
+                    window.location.href = "Home.html"; // Redirect to the home page
+                } else {
+                    alert("Invalid login credentials!");
+                }
             }
         });
     }
@@ -93,16 +100,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const cell1 = newRow.insertCell(0);
         const cell2 = newRow.insertCell(1);
-        const cell3 = newRow.insertCell(2); // Size Column
+        const cell3 = newRow.insertCell(2); 
         const cell4 = newRow.insertCell(3);
         const cell5 = newRow.insertCell(4);
         const cell6 = newRow.insertCell(5);
+        const cell7 = newRow.insertCell(6);
+
+        const totalAmount = parseFloat(itemQuantity) * parseFloat(itemPrice);
 
         cell1.textContent = itemName;
         cell2.textContent = itemType;
         cell3.textContent = itemSize; // Add Size
         cell4.textContent = itemQuantity;
         cell5.textContent = `$${parseFloat(itemPrice).toFixed(2)}`;
+        cell6.textContent = `$${totalAmount.toFixed(2)}`; 
 
         // Edit button functionality
         const editButton = document.createElement('button');
@@ -127,8 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
             tableBody.deleteRow(newRow.rowIndex - 1);
         });
 
-        cell6.appendChild(editButton);
-        cell6.appendChild(deleteButton);
+        cell7.appendChild(editButton);
+        cell7.appendChild(deleteButton);
 
         document.getElementById('inventory-form').reset();
     }
@@ -152,4 +163,6 @@ fetch("sidebar.html")
     });
 })
 .catch(err => console.error("Error loading sidebar:", err));
+
+
 

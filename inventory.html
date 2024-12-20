@@ -1,38 +1,69 @@
-<head>
-    <!-- Include Font Awesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-</head>
-
-<body>
-
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <!-- Include Font Awesome for Icons -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
     
-    <!-- Sidebar -->
-    <div id="sidebar-container"></div>
+    <body>
+    
+        
+        <!-- Sidebar -->
+        <div id="sidebar-container"></div>
+    
+        <!-- Main Content -->
+        <div class="container" id="inventory-container">
+            <div class="inventory-title">Inventory</div>
+            <form id="inventory-form">
+                <input type="text" id="item-name" placeholder="Item Name" required>
+                <select id="item-type">
+                    <option value="Pants">Pants</option>
+                    <option value="T-Shirt">T-Shirt</option>
+                    <option value="Polo">Polo</option>
+                    <option value="Jacket">Jacket</option>
+                    <option value="Polo Shirt">Polo Shirt</option>
+                    <option value="Short">Polo Shirt</option>
+                    <option value="Skirt">Polo Shirt</option>
+                    <option value="Dress">Polo Shirt</option>
+                </select>
+                <select id="item-size">
+                    <option value="S">XXXS</option>
+                    <option value="S">XXS</option>
+                    <option value="S">XS</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XL">XXL</option>
+                    <option value="XL">XXXL</option>
+                </select>
+                <input type="number" id="item-quantity" placeholder="Quantity" min="1" required>
+                <input type="number" id="item-price" placeholder="Price" min="0.01" step="0.01" required>
+                <button type="submit">Add Item</button>
+            </form>
+    
+            <div class="separator"></div>
+    
+            <table id="inventory-table">
+                <thead>
+                    <link rel="stylesheet" href="styles.css">
+                    <tr>
+                        <th>Item</th>
+                        <th>Type</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total Price</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Items will appear here -->
+                </tbody>
+            </table>
+        </div>
+ 
+            <script src="scripts.js"></script>      
 
-    <!-- Main Content -->
-    <div class="container" id="inventory-container">
-        <div class="inventory-title"></div>
-        <form id="inventory-form">
-        </form>
-        <div class="separator"></div>
-
-        <table id="inventory-table">
-            <thead>
-                <link rel="stylesheet" href="styles.css">
-                <tr>
-                    <th>Item</th>
-                    <th>Type</th>
-                    <th>Size</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Items will appear here -->
-            </tbody>
-        </table>
-    </div>
-
-    <script src="scripts.js"></script>
 </body>
+</html>

@@ -1,69 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <!-- Include Font Awesome for Icons -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="sidebar-container"></div>
+
+    <div class="homepage-container">
+        <h1>Welcome to BNK Clothing Shop Dashboard</h1>
+        <p>Manage your inventory efficiently and keep track of your stock.</p>
     
-    <body>
+        <div class="inventory-summary">
+            <div class="summary-card">
+                <h3 class="card-title">Total Items</h3>
+                <p class="card-value">500</p>
+            </div>
+            <div class="summary-card">
+                <h3 class="card-title">Low Stock</h3>
+                <p class="card-value">15</p>
+            </div>
+            <div class="summary-card">
+                <h3 class="card-title">Total Value</h3>
+                <p class="card-value">₱12,500</p>
+            </div>
+        </div>
     
         
-        <!-- Sidebar -->
-        <div id="sidebar-container"></div>
+    </div>
     
-        <!-- Main Content -->
-        <div class="container" id="inventory-container">
-            <div class="inventory-title">Inventory</div>
-            <form id="inventory-form">
-                <input type="text" id="item-name" placeholder="Item Name" required>
-                <select id="item-type">
-                    <option value="Pants">Pants</option>
-                    <option value="T-Shirt">T-Shirt</option>
-                    <option value="Polo">Polo</option>
-                    <option value="Jacket">Jacket</option>
-                    <option value="Polo Shirt">Polo Shirt</option>
-                    <option value="Short">Polo Shirt</option>
-                    <option value="Skirt">Polo Shirt</option>
-                    <option value="Dress">Polo Shirt</option>
-                </select>
-                <select id="item-size">
-                    <option value="S">XXXS</option>
-                    <option value="S">XXS</option>
-                    <option value="S">XS</option>
-                    <option value="S">S</option>
-                    <option value="M">M</option>
-                    <option value="L">L</option>
-                    <option value="XL">XL</option>
-                    <option value="XL">XXL</option>
-                    <option value="XL">XXXL</option>
-                </select>
-                <input type="number" id="item-quantity" placeholder="Quantity" min="1" required>
-                <input type="number" id="item-price" placeholder="Price" min="0.01" step="0.01" required>
-                <button type="submit">Add Item</button>
-            </form>
-    
-            <div class="separator"></div>
-    
-            <table id="inventory-table">
-                <thead>
-                    <link rel="stylesheet" href="styles.css">
-                    <tr>
-                        <th>Item</th>
-                        <th>Type</th>
-                        <th>Size</th>
-                        <th>Quantity</th>
-                        <th>Price</th>
-                        <th>Total Price</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Items will appear here -->
-                </tbody>
-            </table>
-        </div>
- 
-            <script src="scripts.js"></script>      
+    <script>
+        fetch("sidebar.html")
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById("sidebar-container").innerHTML = data;
 
+                const currentPage = window.location.pathname.split("/").pop(); 
+                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
+
+                sidebarLinks.forEach(link => {
+                    const linkHref = link.getAttribute("href").split("/").pop(); 
+                    if (linkHref === currentPage) {
+                        link.classList.add("active");
+                    } else {
+                        link.classList.remove("active");
+                    }
+                });
+            })
+            .catch(err => console.error("Error loading sidebar:", err));
+    </script>
 </body>
 </html>

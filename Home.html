@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
+    <title>Admin Dashboard - BNK Clothing Shop</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Sidebar Container -->
     <div id="sidebar-container"></div>
 
-    <div class="homepage-container">
-        <h1>Welcome to BNK Clothing Shop Dashboard</h1>
-        <p>Manage your inventory efficiently and keep track of your stock.</p>
-        <button class="cta-button">Get Started</button>
-    
-        <div class="inventory-summary">
-            <div class="summary-card">
-                <h3 class="card-title">Total Items</h3>
-                <p class="card-value">500</p>
-            </div>
-            <div class="summary-card">
-                <h3 class="card-title">Low Stock</h3>
-                <p class="card-value">15</p>
-            </div>
-            <div class="summary-card">
-                <h3 class="card-title">Total Value</h3>
-                <p class="card-value">₱12,500</p>
-            </div>
-        </div>
-    
-        <div class="footer">
+    <!-- Main Content Area -->
+    <div class="admin-container">
+        <!-- Admin Header -->
+        <header class="admin-header">
+            <h1>Welcome Back, Admin!</h1>
+            <p>Your dashboard at BNK Clothing Shop is ready to help you manage everything.</p>
+        </header>
+
+        <!-- Admin Overview Section -->
+        <section class="admin-welcome">
+            <h2>Dashboard Overview</h2>
+            <p>From here, you can oversee the entire store and manage products. Everything you need is just a click away!</p>
+        </section>
+
+        <!-- Footer Section -->
+        <footer class="footer">
             <p>&copy; 2024 BNK Clothing. All Rights Reserved.</p>
-        </div>
+        </footer>
     </div>
-    
+
+    <!-- Sidebar Content Loader Script -->
     <script>
         fetch("sidebar.html")
-            .then(response => response.text())
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                return response.text();
+            })
             .then(data => {
                 document.getElementById("sidebar-container").innerHTML = data;
 
@@ -52,7 +52,20 @@
                     }
                 });
             })
-            .catch(err => console.error("Error loading sidebar:", err));
+            .catch(err => {
+                console.error("Error loading sidebar:", err);
+                document.getElementById("sidebar-container").innerHTML = `
+                    <div id="sidebar">
+                        <div class="sidebar-header">BNK Admin Panel</div>
+                        <ul class="sidebar-menu">
+                            <li><a href="home.html" class="active">Dashboard</a></li>
+                            <li><a href="products.html">Products</a></li>
+                            <li><a href="orders.html">Orders</a></li>
+                            <li><a href="customers.html">Customers</a></li>
+                        </ul>
+                    </div>
+                `;
+            });
     </script>
 </body>
 </html>

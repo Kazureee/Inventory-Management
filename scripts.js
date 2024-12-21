@@ -285,113 +285,114 @@ document.addEventListener('DOMContentLoaded', function () {
     displayTotalValue();
 });
 
-    // Load sidebar dynamically
-    document.addEventListener("DOMContentLoaded", () => {
-        // Retrieve the user role from localStorage
-        const userRole = localStorage.getItem("userRole");  // Get role from localStorage
+window.addEventListener('load', () => {
+    const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+    if (!loggedInUser) {
+        alert("You need to log in first.");
+        window.location.href = "login.html";  // Redirect to login if no user is logged in
+        return;
+    }
+
+    // Determine the sidebar based on the user's role
+    const sidebarPath = loggedInUser.role === 'admin' ? 'sidebar.html' : 'sidebar2.html';
     
-        // Check if the sidebar is already loaded
-        if (!document.getElementById("sidebar-container").innerHTML.trim()) {
-            // Fetch the appropriate sidebar based on the user's role
-            const sidebarFile = userRole === 'admin' ? 'sidebar2.html' : 'sidebar.html';
-    
-            fetch(sidebarFile)
-                .then(response => {
-                    if (!response.ok) throw new Error("Sidebar file not found");
-                    return response.text();
-                })
-                .then(data => {
-                    document.getElementById("sidebar-container").innerHTML = data;
-    
-                    // Highlight the active menu link
-                    const currentPage = window.location.pathname.split("/").pop();
-                    const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
-    
-                    sidebarLinks.forEach(link => {
-                        const linkHref = link.getAttribute("href").split("/").pop();
-                        if (linkHref === currentPage) {
-                            link.classList.add("active");
-                        } else {
-                            link.classList.remove("active");
-                        }
-                    });
-                })
-                .catch(err => console.error("Error loading sidebar:", err));
-        }
-    });
+    fetch(sidebarPath)
+        .then(response => {
+            if (!response.ok) throw new Error("Sidebar file not found");
+            return response.text();
+        })
+        .then(data => {
+            document.getElementById("sidebar-container").innerHTML = data;
 
-         // Function to load users from localStorage and display them in the table
-  function loadUsers() {
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-    userTableBody.innerHTML = ''; // Clear existing rows
+            // Highlight the active menu link
+            const currentPage = window.location.pathname.split("/").pop();
+            const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
-    users.forEach(user => {
-        const row = userTableBody.insertRow();
-        row.insertCell(0).innerText = user.name || "N/A";
-        row.insertCell(1).innerText = user.username;
-        row.insertCell(2).innerText = user.role;
-        row.insertCell(3).innerHTML = `
-            <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-            <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-        `;
-        row.dataset.username = user.username; // Store username in data attribute
-    });
-}
-
-// Initial load of users
-loadUsers();
-
-// Event delegation for Edit and Delete buttons
-document.getElementById("user-table").addEventListener('click', (event) => {
-    const target = event.target.closest('.action-btn'); // Ensure you handle clicks on buttons and icons
-    if (!target) return; // Exit if the clicked element is not a button or inside a button
-
-    if (target.classList.contains('edit-btn')) {
-        const row = target.closest('tr');
-        const username = row.dataset.username;
-
+            sidebarLinks.forEach(link => {
+                const linkHref = link.getAttribute("href").split("/").pop();
+                if (linkHref === currentPage) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        })
+        .catch(err => console.error("Error loading sidebar:", err));
+});
+     // Function to load users from localStorage and display them in the table
+     function loadUsers() {
         const users = JSON.parse(localStorage.getItem("users")) || [];
-        const userToEdit = users.find(user => user.username === username);
-
-        if (userToEdit) {
-            document.getElementById("edit-name").value = userToEdit.name;
-            document.getElementById("edit-username").value = userToEdit.username;
-            document.getElementById("edit-role").value = userToEdit.role;
-
-            document.getElementById("edit-user-modal").style.display = "block";
-
-            document.getElementById("edit-user-form").onsubmit = (e) => {
-                e.preventDefault();
-
-                userToEdit.name = document.getElementById("edit-name").value;
-                userToEdit.username = document.getElementById("edit-username").value;
-                userToEdit.role = document.getElementById("edit-role").value;
-
-                localStorage.setItem("users", JSON.stringify(users));
-
-                loadUsers();
-
-                document.getElementById("edit-user-modal").style.display = "none";
-            };
-        }
+        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+        userTableBody.innerHTML = ''; // Clear existing rows
+    
+        users.forEach(user => {
+            const row = userTableBody.insertRow();
+            row.insertCell(0).innerText = user.name || "N/A";
+            row.insertCell(1).innerText = user.username;
+            row.insertCell(2).innerText = user.role;
+            row.insertCell(3).innerHTML = `
+                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+            `;
+            row.dataset.username = user.username; // Store username in data attribute
+        });
     }
-
-    if (target.classList.contains('delete-btn')) {
-        const row = target.closest('tr');
-        const username = row.dataset.username;
-
-        if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+    
+    // Initial load of users
+    loadUsers();
+    
+    // Event delegation for Edit and Delete buttons
+    document.getElementById("user-table").addEventListener('click', (event) => {
+        const target = event.target.closest('.action-btn'); // Ensure you handle clicks on buttons and icons
+        if (!target) return; // Exit if the clicked element is not a button or inside a button
+    
+        if (target.classList.contains('edit-btn')) {
+            const row = target.closest('tr');
+            const username = row.dataset.username;
+    
             const users = JSON.parse(localStorage.getItem("users")) || [];
-            const updatedUsers = users.filter(user => user.username !== username);
-            localStorage.setItem("users", JSON.stringify(updatedUsers));
-
-            row.remove();
+            const userToEdit = users.find(user => user.username === username);
+    
+            if (userToEdit) {
+                document.getElementById("edit-name").value = userToEdit.name;
+                document.getElementById("edit-username").value = userToEdit.username;
+                document.getElementById("edit-role").value = userToEdit.role;
+    
+                document.getElementById("edit-user-modal").style.display = "block";
+    
+                document.getElementById("edit-user-form").onsubmit = (e) => {
+                    e.preventDefault();
+    
+                    userToEdit.name = document.getElementById("edit-name").value;
+                    userToEdit.username = document.getElementById("edit-username").value;
+                    userToEdit.role = document.getElementById("edit-role").value;
+    
+                    localStorage.setItem("users", JSON.stringify(users));
+    
+                    loadUsers();
+    
+                    document.getElementById("edit-user-modal").style.display = "none";
+                };
+            }
         }
-    }
-});
-
-// Close modal on cancel button
-document.getElementById("close-modal").addEventListener("click", () => {
-    document.getElementById("edit-user-modal").style.display = "none";
-});
+    
+        if (target.classList.contains('delete-btn')) {
+            const row = target.closest('tr');
+            const username = row.dataset.username;
+    
+            if (confirm(`Are you sure you want to delete user: ${username}?`)) {
+                const users = JSON.parse(localStorage.getItem("users")) || [];
+                const updatedUsers = users.filter(user => user.username !== username);
+                localStorage.setItem("users", JSON.stringify(updatedUsers));
+    
+                row.remove();
+            }
+        }
+    });
+    
+    // Close modal on cancel button
+    document.getElementById("close-modal").addEventListener("click", () => {
+        document.getElementById("edit-user-modal").style.display = "none";
+    });
+    

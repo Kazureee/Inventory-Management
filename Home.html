@@ -30,42 +30,7 @@
         </footer>
     </div>
 
-    <!-- Sidebar Content Loader Script -->
-    <script>
-        fetch("sidebar.html")
-            .then(response => {
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                return response.text();
-            })
-            .then(data => {
-                document.getElementById("sidebar-container").innerHTML = data;
-
-                const currentPage = window.location.pathname.split("/").pop(); 
-                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
-
-                sidebarLinks.forEach(link => {
-                    const linkHref = link.getAttribute("href").split("/").pop(); 
-                    if (linkHref === currentPage) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            })
-            .catch(err => {
-                console.error("Error loading sidebar:", err);
-                document.getElementById("sidebar-container").innerHTML = `
-                    <div id="sidebar">
-                        <div class="sidebar-header">BNK Admin Panel</div>
-                        <ul class="sidebar-menu">
-                            <li><a href="home.html" class="active">Dashboard</a></li>
-                            <li><a href="products.html">Products</a></li>
-                            <li><a href="orders.html">Orders</a></li>
-                            <li><a href="customers.html">Customers</a></li>
-                        </ul>
-                    </div>
-                `;
-            });
-    </script>
+    <script src="scripts.js"></script> 
+    
 </body>
 </html>

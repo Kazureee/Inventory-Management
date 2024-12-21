@@ -27,36 +27,6 @@
         </div>
     </div>
 
-    <!-- Script for Registration Form -->
-    <script>
-        document.getElementById("registration-form").onsubmit = (e) => {
-            e.preventDefault();
-
-            // Get input values
-            const username = document.getElementById("reg-username").value.trim();
-            const password = document.getElementById("reg-password").value.trim();
-            const role = document.getElementById("reg-role").value;
-
-            // Retrieve existing users or create an empty array
-            const users = JSON.parse(localStorage.getItem("users")) || [];
-
-            // Check if username already exists
-            if (users.some(user => user.username === username)) {
-                alert("Username already exists. Please choose a different one.");
-                return;
-            }
-
-            // Add the new user to the users array
-            users.push({ username, password, role });
-
-            // Save updated users array to localStorage
-            localStorage.setItem("users", JSON.stringify(users));
-
-            alert("Registration successful! You can now log in.");
-            document.getElementById("registration-form").reset();
-        };
-    </script>
-
     <script src="scripts.js"></script>
 </body>
 </html>

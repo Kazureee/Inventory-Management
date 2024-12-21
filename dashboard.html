@@ -16,40 +16,22 @@
         <div class="inventory-summary">
             <div class="summary-card">
                 <h3 class="card-title">Total Items</h3>
-                <p class="card-value">500</p>
+                <p class="card-value" id="total-items">0</p> 
             </div>
             <div class="summary-card">
                 <h3 class="card-title">Low Stock</h3>
-                <p class="card-value">15</p>
+                <ul id="low-stock-items" class="low-stock-list">
+                </ul>
             </div>
             <div class="summary-card">
                 <h3 class="card-title">Total Value</h3>
-                <p class="card-value">₱12,500</p>
+                <p class="card-value" id="total-value">₱0.00</p>
             </div>
         </div>
     
         
     </div>
     
-    <script>
-        fetch("sidebar.html")
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById("sidebar-container").innerHTML = data;
-
-                const currentPage = window.location.pathname.split("/").pop(); 
-                const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
-
-                sidebarLinks.forEach(link => {
-                    const linkHref = link.getAttribute("href").split("/").pop(); 
-                    if (linkHref === currentPage) {
-                        link.classList.add("active");
-                    } else {
-                        link.classList.remove("active");
-                    }
-                });
-            })
-            .catch(err => console.error("Error loading sidebar:", err));
-    </script>
+   <script src="scripts.js"></script>    
 </body>
 </html>

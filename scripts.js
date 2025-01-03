@@ -38,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }));
     
             alert("Login successful!");
+            console.log("Login successful, redirecting to Home.html");
             window.location.href = "Home.html"; // Redirect after login
         } else {
             alert("Invalid login credentials!");
@@ -71,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.href = "login.html";
     });
 });
+
 document.addEventListener('DOMContentLoaded', function () {
     const inventoryForm = document.getElementById('inventory-form');
     const tableBody = document.getElementById('inventory-table').getElementsByTagName('tbody')[0];
@@ -183,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function () {
     loadInventory();
 });
 
-
 document.addEventListener('DOMContentLoaded', function () {
     // Function to load inventory from localStorage
     function loadInventory() {
@@ -286,7 +287,14 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 window.addEventListener('load', () => {
+    const currentPage = window.location.pathname.split("/").pop();
+    if (currentPage === "login.html" || currentPage === "registration.html") {
+        // Skip login check on the login and registration pages
+        return;
+    }
+
     const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+    console.log("Checking login status:", loggedInUser);
 
     if (!loggedInUser) {
         alert("You need to log in first.");
@@ -306,7 +314,6 @@ window.addEventListener('load', () => {
             document.getElementById("sidebar-container").innerHTML = data;
 
             // Highlight the active menu link
-            const currentPage = window.location.pathname.split("/").pop();
             const sidebarLinks = document.querySelectorAll(".sidebar-menu li a");
 
             sidebarLinks.forEach(link => {
@@ -320,79 +327,79 @@ window.addEventListener('load', () => {
         })
         .catch(err => console.error("Error loading sidebar:", err));
 });
-     // Function to load users from localStorage and display them in the table
-     function loadUsers() {
+
+// Function to load users from localStorage and display them in the table
+function loadUsers() {
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
+    userTableBody.innerHTML = ''; // Clear existing rows
+
+    users.forEach(user => {
+        const row = userTableBody.insertRow();
+        row.insertCell(0).innerText = user.name || "N/A";
+        row.insertCell(1).innerText = user.username;
+        row.insertCell(2).innerText = user.role;
+        row.insertCell(3).innerHTML = `
+            <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
+            <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
+        `;
+        row.dataset.username = user.username; // Store username in data attribute
+    });
+}
+
+// Initial load of users
+loadUsers();
+
+// Event delegation for Edit and Delete buttons
+document.getElementById("user-table").addEventListener('click', (event) => {
+    const target = event.target.closest('.action-btn'); // Ensure you handle clicks on buttons and icons
+    if (!target) return; // Exit if the clicked element is not a button or inside a button
+
+    if (target.classList.contains('edit-btn')) {
+        const row = target.closest('tr');
+        const username = row.dataset.username;
+
         const users = JSON.parse(localStorage.getItem("users")) || [];
-        const userTableBody = document.getElementById("user-table").getElementsByTagName("tbody")[0];
-        userTableBody.innerHTML = ''; // Clear existing rows
-    
-        users.forEach(user => {
-            const row = userTableBody.insertRow();
-            row.insertCell(0).innerText = user.name || "N/A";
-            row.insertCell(1).innerText = user.username;
-            row.insertCell(2).innerText = user.role;
-            row.insertCell(3).innerHTML = `
-                <button class="action-btn edit-btn"><i class="fas fa-edit"></i></button>
-                <button class="action-btn delete-btn"><i class="fas fa-trash-alt"></i></button>
-            `;
-            row.dataset.username = user.username; // Store username in data attribute
-        });
+        const userToEdit = users.find(user => user.username === username);
+
+        if (userToEdit) {
+            document.getElementById("edit-name").value = userToEdit.name;
+            document.getElementById("edit-username").value = userToEdit.username;
+            document.getElementById("edit-role").value = userToEdit.role;
+
+            document.getElementById("edit-user-modal").style.display = "block";
+
+            document.getElementById("edit-user-form").onsubmit = (e) => {
+                e.preventDefault();
+
+                userToEdit.name = document.getElementById("edit-name").value;
+                userToEdit.username = document.getElementById("edit-username").value;
+                userToEdit.role = document.getElementById("edit-role").value;
+
+                localStorage.setItem("users", JSON.stringify(users));
+
+                loadUsers();
+
+                document.getElementById("edit-user-modal").style.display = "none";
+            };
+        }
     }
-    
-    // Initial load of users
-    loadUsers();
-    
-    // Event delegation for Edit and Delete buttons
-    document.getElementById("user-table").addEventListener('click', (event) => {
-        const target = event.target.closest('.action-btn'); // Ensure you handle clicks on buttons and icons
-        if (!target) return; // Exit if the clicked element is not a button or inside a button
-    
-        if (target.classList.contains('edit-btn')) {
-            const row = target.closest('tr');
-            const username = row.dataset.username;
-    
+
+    if (target.classList.contains('delete-btn')) {
+        const row = target.closest('tr');
+        const username = row.dataset.username;
+
+        if (confirm(`Are you sure you want to delete user: ${username}?`)) {
             const users = JSON.parse(localStorage.getItem("users")) || [];
-            const userToEdit = users.find(user => user.username === username);
-    
-            if (userToEdit) {
-                document.getElementById("edit-name").value = userToEdit.name;
-                document.getElementById("edit-username").value = userToEdit.username;
-                document.getElementById("edit-role").value = userToEdit.role;
-    
-                document.getElementById("edit-user-modal").style.display = "block";
-    
-                document.getElementById("edit-user-form").onsubmit = (e) => {
-                    e.preventDefault();
-    
-                    userToEdit.name = document.getElementById("edit-name").value;
-                    userToEdit.username = document.getElementById("edit-username").value;
-                    userToEdit.role = document.getElementById("edit-role").value;
-    
-                    localStorage.setItem("users", JSON.stringify(users));
-    
-                    loadUsers();
-    
-                    document.getElementById("edit-user-modal").style.display = "none";
-                };
-            }
+            const updatedUsers = users.filter(user => user.username !== username);
+            localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+            row.remove();
         }
-    
-        if (target.classList.contains('delete-btn')) {
-            const row = target.closest('tr');
-            const username = row.dataset.username;
-    
-            if (confirm(`Are you sure you want to delete user: ${username}?`)) {
-                const users = JSON.parse(localStorage.getItem("users")) || [];
-                const updatedUsers = users.filter(user => user.username !== username);
-                localStorage.setItem("users", JSON.stringify(updatedUsers));
-    
-                row.remove();
-            }
-        }
-    });
-    
-    // Close modal on cancel button
-    document.getElementById("close-modal").addEventListener("click", () => {
-        document.getElementById("edit-user-modal").style.display = "none";
-    });
-    
+    }
+});
+
+// Close modal on cancel button
+document.getElementById("close-modal").addEventListener("click", () => {
+    document.getElementById("edit-user-modal").style.display = "none";
+});
